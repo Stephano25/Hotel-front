@@ -1,0 +1,20 @@
+<div class="dashboard">
+  <h2>📦 Gestion des Produits</h2>
+
+  <form (ngSubmit)="onSubmit()">
+    <input type="text" [(ngModel)]="product.name" name="name" placeholder="Nom du produit" required>
+    <input type="number" [(ngModel)]="product.price" name="price" placeholder="Prix" required min="0">
+    <button type="submit">{{ editIndex === -1 ? 'Ajouter' : 'Mettre à jour' }}</button>
+    <button type="button" (click)="cancelEdit()" *ngIf="editIndex !== -1">Annuler</button>
+  </form>
+
+  <ul *ngIf="products.length > 0">
+    <li *ngFor="let p of products; index as i">
+      <strong>{{ p.name }}</strong> — {{ p.price | currency:'MGA':'symbol' }}
+      <button (click)="editProduct(i)">✏️</button>
+      <button (click)="deleteProduct(i)">🗑️</button>
+    </li>
+  </ul>
+
+  <p *ngIf="products.length === 0">Aucun produit pour le moment.</p>
+</div>

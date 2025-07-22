@@ -1,5 +1,5 @@
-/* Styles spécifiques pour la page de connexion */
-.login-container {
+/* Styles spécifiques pour la page d'inscription */
+.register-container {
     background: rgba(255, 255, 255, 0.95);
     border-radius: 20px;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
@@ -11,13 +11,21 @@
     animation: fadeIn 0.6s ease-out;
 }
 
-.login-container form {
+.register-container h2 {
+    text-align: center;
+    color: #343a40;
+    margin-bottom: 30px;
+    font-weight: 300;
+    font-size: 1.8rem;
+}
+
+.register-container form {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-.login-container input {
+.register-container input {
     padding: 15px 20px;
     border: 2px solid #e9ecef;
     border-radius: 12px;
@@ -26,17 +34,17 @@
     background: #f8f9fa;
 }
 
-.login-container input:focus {
+.register-container input:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: #28a745;
     background: white;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
     transform: translateY(-2px);
 }
 
-.login-container button {
+.register-container button {
     padding: 15px;
-    background: linear-gradient(45deg, #667eea, #764ba2);
+    background: linear-gradient(45deg, #28a745, #20c997);
     color: white;
     border: none;
     border-radius: 12px;
@@ -48,36 +56,40 @@
     letter-spacing: 1px;
 }
 
-.login-container button:hover {
+.register-container button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 10px 20px rgba(40, 167, 69, 0.3);
 }
 
-.login-container button:active {
+.register-container button:active {
     transform: translateY(0);
 }
 
-.login-container p {
+.register-container p {
     text-align: center;
     margin-top: 25px;
     color: #6c757d;
 }
 
-.login-container a {
-    color: #667eea;
+.register-container a {
+    color: #28a745;
     text-decoration: none;
     font-weight: 600;
     transition: color 0.3s ease;
 }
 
-.login-container a:hover {
-    color: #764ba2;
+.register-container a:hover {
+    color: #20c997;
 }
 
-/* Responsive pour la page de connexion */
+/* Responsive pour la page d'inscription */
 @media (max-width: 480px) {
-    .login-container {
+    .register-container {
         margin: 20px;
         padding: 30px 20px;
+    }
+    
+    .register-container h2 {
+        font-size: 1.5rem;
     }
 }
