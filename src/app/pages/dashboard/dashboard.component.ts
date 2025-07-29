@@ -1,11 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-interface Product {
-  name: string;
-  price: number;
-}
+import { ProductService, Product } from '../../services/product';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,21 +10,46 @@ interface Product {
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   products: Product[] = [];
-  product: Product = { name: '', price: 0 };
+
+  // Ajout de description à l'objet produit
+  product: Product = { name: '', price: 0, description: '' };
   editIndex: number = -1;
+
+  constructor(private productService: ProductService) {}
+
+  ngOnInit() {
+    this.loadProducts();
+  }
+
+  loadProducts() {
+    this.productService.getProducts().subscribe({
+      next: (data) => this.products = data,
+      error: () => alert("❌ Échec du chargement des produits")
+    });
+  }
 
   onSubmit() {
     if (this.editIndex === -1) {
-      // Ajout produit
-      this.products.push({ ...this.product });
+      // Créer un nouveau produit
+      this.productService.createProduct(this.product).subscribe({
+        next: (newProduct) => {
+          this.products.push(newProduct);
+          this.resetForm();
+        },
+        error: () => alert("❌ Échec de l’ajout du produit")
+      });
     } else {
-      // Modification produit
-      this.products[this.editIndex] = { ...this.product };
-      this.editIndex = -1;
+      const productToUpdate = this.products[this.editIndex];
+      this.productService.updateProduct(productToUpdate._id!, this.product).subscribe({
+        next: (updatedProduct) => {
+          this.products[this.editIndex] = updatedProduct;
+          this.resetForm();
+        },
+        error: () => alert("❌ Échec de la mise à jour")
+      });
     }
-    this.product = { name: '', price: 0 };
   }
 
   editProduct(index: number) {
@@ -37,14 +58,22 @@ export class DashboardComponent {
   }
 
   deleteProduct(index: number) {
-    this.products.splice(index, 1);
-    if (this.editIndex === index) {
-      this.cancelEdit();
-    }
+    const id = this.products[index]._id!;
+    this.productService.deleteProduct(id).subscribe({
+      next: () => {
+        this.products.splice(index, 1);
+        if (this.editIndex === index) this.resetForm();
+      },
+      error: () => alert("❌ Échec de la suppression")
+    });
   }
 
   cancelEdit() {
+    this.resetForm();
+  }
+
+  resetForm() {
     this.editIndex = -1;
-    this.product = { name: '', price: 0 };
+    this.product = { name: '', price: 0, description: '' };
   }
 }

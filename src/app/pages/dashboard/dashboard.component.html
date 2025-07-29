@@ -1,20 +1,70 @@
-<div class="dashboard">
-  <h2>📦 Gestion des Produits</h2>
+<div class="max-w-xl mx-auto mt-10 bg-white p-6 rounded-2xl shadow-xl space-y-6">
+  <h2 class="text-2xl font-bold text-center">📦 Gestion des Produits</h2>
 
-  <form (ngSubmit)="onSubmit()">
-    <input type="text" [(ngModel)]="product.name" name="name" placeholder="Nom du produit" required>
-    <input type="number" [(ngModel)]="product.price" name="price" placeholder="Prix" required min="0">
-    <button type="submit">{{ editIndex === -1 ? 'Ajouter' : 'Mettre à jour' }}</button>
-    <button type="button" (click)="cancelEdit()" *ngIf="editIndex !== -1">Annuler</button>
+  <form (ngSubmit)="onSubmit()" class="space-y-4">
+    <input
+      type="text"
+      [(ngModel)]="product.name"
+      name="name"
+      placeholder="Nom du produit"
+      required
+      class="w-full px-4 py-2 border rounded-lg"
+    />
+
+    <input
+      type="number"
+      [(ngModel)]="product.price"
+      name="price"
+      placeholder="Prix"
+      required
+      min="0"
+      class="w-full px-4 py-2 border rounded-lg"
+    />
+
+    <textarea
+      [(ngModel)]="product.description"
+      name="description"
+      placeholder="Description"
+      rows="3"
+      class="w-full px-4 py-2 border rounded-lg"
+    ></textarea>
+
+    <div class="flex space-x-4">
+      <button
+        type="submit"
+        class="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+      >
+        {{ editIndex === -1 ? 'Ajouter' : 'Mettre à jour' }}
+      </button>
+      <button
+        *ngIf="editIndex !== -1"
+        type="button"
+        (click)="cancelEdit()"
+        class="flex-1 bg-gray-400 text-white py-2 rounded-lg hover:bg-gray-500 transition"
+      >
+        Annuler
+      </button>
+    </div>
   </form>
 
-  <ul *ngIf="products.length > 0">
-    <li *ngFor="let p of products; index as i">
-      <strong>{{ p.name }}</strong> — {{ p.price | currency:'MGA':'symbol' }}
-      <button (click)="editProduct(i)">✏️</button>
-      <button (click)="deleteProduct(i)">🗑️</button>
-    </li>
-  </ul>
+  <div *ngIf="products.length > 0" class="space-y-4">
+    <div
+      *ngFor="let p of products; index as i"
+      class="border rounded-lg p-4 flex justify-between items-center"
+    >
+      <div>
+        <p class="font-bold">{{ p.name }}</p>
+        <p class="text-sm text-gray-600">{{ p.description }}</p>
+        <p class="text-blue-600">{{ p.price | currency:'MGA':'symbol' }}</p>
+      </div>
+      <div class="space-x-2">
+        <button (click)="editProduct(i)" class="text-yellow-500 text-xl">✏️</button>
+        <button (click)="deleteProduct(i)" class="text-red-500 text-xl">🗑️</button>
+      </div>
+    </div>
+  </div>
 
-  <p *ngIf="products.length === 0">Aucun produit pour le moment.</p>
+  <p *ngIf="products.length === 0" class="text-center text-gray-500">
+    Aucun produit pour le moment.
+  </p>
 </div>

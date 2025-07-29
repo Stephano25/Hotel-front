@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  // URL de base de l'API
-  private API_URL = 'http://192.168.88.163:5000/api/auth';
+  // ✅ Utilise localhost si backend et frontend sont sur la même machine
+  private API_URL = 'http://localhost:5000/api/auth';
 
   constructor(private http: HttpClient) {}
 
@@ -16,7 +16,7 @@ export class AuthService {
   }
 
   register(name: string, email: string, password: string) {
-    return this.http.post(`${this.API_URL}/signup`, {  // <-- corrigé ici
+    return this.http.post(`${this.API_URL}/signup`, {
       name,
       email,
       password
