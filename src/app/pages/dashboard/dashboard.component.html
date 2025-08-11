@@ -1,70 +1,888 @@
-<div class="max-w-xl mx-auto mt-10 bg-white p-6 rounded-2xl shadow-xl space-y-6">
-  <h2 class="text-2xl font-bold text-center">📦 Gestion des Produits</h2>
+SS<!-- src/app/pages/dashboard/dashboard.component.html -->
+<div class="flex h-screen bg-gray-100 font-sans">
 
-  <form (ngSubmit)="onSubmit()" class="space-y-4">
-    <input
-      type="text"
-      [(ngModel)]="product.name"
-      name="name"
-      placeholder="Nom du produit"
-      required
-      class="w-full px-4 py-2 border rounded-lg"
-    />
-
-    <input
-      type="number"
-      [(ngModel)]="product.price"
-      name="price"
-      placeholder="Prix"
-      required
-      min="0"
-      class="w-full px-4 py-2 border rounded-lg"
-    />
-
-    <textarea
-      [(ngModel)]="product.description"
-      name="description"
-      placeholder="Description"
-      rows="3"
-      class="w-full px-4 py-2 border rounded-lg"
-    ></textarea>
-
-    <div class="flex space-x-4">
-      <button
-        type="submit"
-        class="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
-      >
-        {{ editIndex === -1 ? 'Ajouter' : 'Mettre à jour' }}
-      </button>
-      <button
-        *ngIf="editIndex !== -1"
-        type="button"
-        (click)="cancelEdit()"
-        class="flex-1 bg-gray-400 text-white py-2 rounded-lg hover:bg-gray-500 transition"
-      >
-        Annuler
-      </button>
-    </div>
-  </form>
-
-  <div *ngIf="products.length > 0" class="space-y-4">
-    <div
-      *ngFor="let p of products; index as i"
-      class="border rounded-lg p-4 flex justify-between items-center"
-    >
+  <!-- Barre latérale gauche (Bleu foncé) -->
+  <aside class="w-64 bg-blue-800 text-white p-6 flex flex-col shadow-lg">
+    <div class="text-2xl font-bold mb-8 text-center">Mon App Hôtel</div>
+    <div class="flex items-center mb-8">
+      <div class="w-12 h-12 rounded-full bg-white flex items-center justify-center mr-3">
+        <!-- Placeholder pour l'image de profil -->
+        <span class="text-blue-800 text-xl font-bold">JD</span>
+      </div>
       <div>
-        <p class="font-bold">{{ p.name }}</p>
-        <p class="text-sm text-gray-600">{{ p.description }}</p>
-        <p class="text-blue-600">{{ p.price | currency:'MGA':'symbol' }}</p>
-      </div>
-      <div class="space-x-2">
-        <button (click)="editProduct(i)" class="text-yellow-500 text-xl">✏️</button>
-        <button (click)="deleteProduct(i)" class="text-red-500 text-xl">🗑️</button>
+        <p class="font-semibold">$adminCount/p>
+        <p class="text-sm text-blue-200">Admin</p>
       </div>
     </div>
-  </div>
+    <nav class="flex-grow">
+      <ul class="space-y-2">
+        <li>
+          <!-- Bouton Tableau de Bord qui affiche la vue d'ensemble -->
+          <a (click)="showOverview()" class="flex items-center py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200"
+             [ngClass]="{'bg-blue-700': currentView === 'overview'}">
+            <span class="mr-3">📊</span> Tableau de Bord
+          </a>
+        </li>
+        <li>
+          <!-- Lien pour la gestion des Chambres -->
+          <a (click)="showRooms()"
+            class="w-full text-left flex items-center py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200"
+            [ngClass]="{'bg-blue-700': currentView === 'rooms' || currentView === 'addRoom' || currentView === 'editRoom'}">
+            <span class="mr-3">🛌</span> Chambres
+          </a>
+        </li>
+        <li>
+          <!-- Lien pour la gestion des Loisirs -->
+          <a (click)="showLeisures()"
+            class="w-full text-left flex items-center py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200"
+            [ngClass]="{'bg-blue-700': currentView === 'leisures' || currentView === 'addLeisure' || currentView === 'editLeisure'}">
+            <span class="mr-3">⚽</span> Loisirs
+          </a>
+        </li>
+        <li>
+          <!-- Lien pour la gestion des Menus Restaurant -->
+          <a (click)="showMenus()"
+            class="w-full text-left flex items-center py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200"
+            [ngClass]="{'bg-blue-700': currentView === 'menus' || currentView === 'addMenu' || currentView === 'editMenu'}">
+            <span class="mr-3">🍽️</span> Menu Restaurant
+          </a>
+        </li>
+        <li>
+          <!-- Lien pour la gestion des Jeux -->
+          <a (click)="showGames()"
+            class="w-full text-left flex items-center py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200"
+            [ngClass]="{'bg-blue-700': currentView === 'games' || currentView === 'addGame' || currentView === 'editGame'}">
+            <span class="mr-3">🎮</span> Jeux
+          </a>
+        </li>
+        <li>
+          <!-- Lien pour la gestion des Piscines -->
+          <a (click)="showPools()"
+            class="w-full text-left flex items-center py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200"
+            [ngClass]="{'bg-blue-700': currentView === 'pools' || currentView === 'addPool' || currentView === 'editPool'}">
+            <span class="mr-3">🏊</span> Piscines
+          </a>
+        </li>
+        <li>
+          <!-- Lien pour la gestion des Administrateurs -->
+          <a (click)="showAdmins()"
+            class="w-full text-left flex items-center py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200"
+            [ngClass]="{'bg-blue-700': currentView === 'admins' || currentView === 'addAdmin' || currentView === 'editAdmin'}">
+            <span class="mr-3">👤</span> Administrateurs
+          </a>
+        </li>
+        <li class="mt-auto"> <!-- Pousse le bouton de déconnexion vers le bas -->
+          <button (click)="handleLogout()"
+            class="w-full text-left flex items-center py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200">
+            <span class="mr-3">🚪</span> Déconnexion
+          </button>
+        </li>
+        <li>
+          <button (click)="navigateToHome()"
+            class="w-full text-left flex items-center py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200">
+            <span class="mr-3">🏠</span> Retour au Site
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </aside>
 
-  <p *ngIf="products.length === 0" class="text-center text-gray-500">
-    Aucun produit pour le moment.
-  </p>
+  <!-- Contenu principal -->
+  <main class="flex-1 flex flex-col overflow-hidden">
+    <!-- Barre de navigation supérieure (Bleu clair) -->
+    <header class="bg-blue-600 text-white p-4 flex justify-between items-center shadow-md">
+      <div class="flex items-center">
+        <h1 class="text-xl font-semibold">Tableau de Bord</h1>
+        <span class="ml-4 text-blue-200">/ {{ currentView | titlecase }}</span>
+      </div>
+      <div class="flex items-center space-x-4">
+        <input type="text" placeholder="Rechercher..." class="bg-blue-500 text-white placeholder-blue-200 px-3 py-1 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300">
+        <span class="text-xl">🔔</span> <!-- Icône de notification -->
+        <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center">
+          <!-- Placeholder pour l'avatar utilisateur -->
+          <span class="text-blue-600 font-bold text-sm">JD</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Corps du contenu principal -->
+    <div class="flex-1 overflow-y-auto p-6 bg-gray-100">
+
+      <!-- Message de succès/erreur (positionné en haut du contenu principal) -->
+      <div *ngIf="message" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+        {{ message }}
+      </div>
+      <div *ngIf="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+        {{ error }}
+      </div>
+
+      <!-- Section d'aperçu du tableau de bord (cartes, félicitations, activité récente) -->
+      <ng-container *ngIf="currentView === 'overview'">
+        <!-- Section des cartes récapitulatives -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+          <div class="bg-white p-4 rounded-lg shadow-md flex items-center justify-between">
+            <div>
+              <p class="text-gray-500 text-sm">Chambres Disponibles</p>
+              <p class="text-2xl font-bold text-gray-800">{{ availableRoomsCount }}</p>
+            </div>
+            <span class="text-blue-600 text-3xl">🛏️</span>
+          </div>
+          <div class="bg-white p-4 rounded-lg shadow-md flex items-center justify-between">
+            <div>
+              <p class="text-gray-500 text-sm">Chambres Occupées</p>
+              <p class="text-2xl font-bold text-gray-800">{{ occupiedRoomsCount }}</p>
+            </div>
+            <span class="text-red-600 text-3xl"> occupancy </span>
+          </div>
+          <div class="bg-white p-4 rounded-lg shadow-md flex items-center justify-between">
+            <div>
+              <p class="text-gray-500 text-sm">Tables Restaurant Disponibles</p>
+              <p class="text-2xl font-bold text-gray-800">{{ availableRestaurantTables }}</p>
+            </div>
+            <span class="text-yellow-600 text-3xl">🍽️</span>
+          </div>
+          <div class="bg-white p-4 rounded-lg shadow-md flex items-center justify-between">
+            <div>
+              <p class="text-gray-500 text-sm">Administrateurs</p>
+              <p class="text-2xl font-bold text-gray-800">{{ adminCount }}</p>
+            </div>
+            <span class="text-purple-600 text-3xl">🧑‍💻</span>
+          </div>
+          <div class="bg-white p-4 rounded-lg shadow-md flex items-center justify-between">
+            <div>
+              <p class="text-gray-500 text-sm">Visiteurs du Site</p>
+              <p class="text-2xl font-bold text-gray-800">{{ pageVisitors }}</p>
+            </div>
+            <span class="text-indigo-600 text-3xl">🌐</span>
+          </div>
+          <div class="bg-white p-4 rounded-lg shadow-md flex items-center justify-between">
+            <div>
+              <p class="text-gray-500 text-sm">Utilisateurs Inscrits</p>
+              <p class="text-2xl font-bold text-gray-800">{{ registeredUsers }}</p>
+            </div>
+            <span class="text-pink-600 text-3xl">📝</span>
+          </div>
+          <div class="bg-white p-4 rounded-lg shadow-md flex items-center justify-between">
+            <div>
+              <p class="text-gray-500 text-sm">Utilisateurs Connectés</p>
+              <p class="text-2xl font-bold text-gray-800">{{ loggedInUsers }}</p>
+            </div>
+            <span class="text-teal-600 text-3xl">🟢</span>
+          </div>
+        </div>
+
+        <!-- Section "Félicitations" -->
+        <div class="bg-white p-6 rounded-lg shadow-md flex items-center justify-between mb-6">
+          <div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">Félicitations, Admin ! 👋</h3>
+            <p class="text-gray-600 mb-4">Vous avez réalisé {{ totalRevenue }} € de revenus ce mois-ci.</p>
+            <div class="flex space-x-6">
+              <div>
+                <p class="text-gray-500 text-sm">Revenus du mois</p>
+                <p class="text-xl font-bold text-green-600">{{ totalRevenue }} €</p>
+              </div>
+              <div>
+                <p class="text-gray-500 text-sm">Dépenses du mois</p>
+                <p class="text-xl font-bold text-red-600">{{ totalExpenses }} €</p>
+              </div>
+              <div>
+                <p class="text-gray-500 text-sm">Bénéfice du mois</p>
+                <p class="text-xl font-bold text-blue-600">{{ totalProfit }} €</p>
+              </div>
+            </div>
+          </div>
+          <div class="w-32 h-32 flex items-center justify-center">
+            <!-- Placeholder pour l'illustration (peut être une SVG ou une image) -->
+            <img src="https://placehold.co/128x128/E0F2F7/2C5282?text=Illustration" alt="Illustration de succès" class="rounded-lg">
+          </div>
+        </div>
+
+        <!-- Section Activité Récente -->
+        <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+          <h3 class="text-xl font-semibold text-gray-800 mb-4">Activité Récente</h3>
+          <p class="text-gray-600 mb-4">Vue d'ensemble des dernières actions et événements sur le site.</p>
+          <ul class="space-y-3">
+            <li class="p-3 bg-gray-50 rounded-md border border-gray-200">
+              <p class="text-gray-800 font-medium">Nouvelle commande #2025001 par Jean Dupont - <span class="text-gray-500 text-sm">il y a 5 min</span></p>
+            </li>
+            <li class="p-3 bg-gray-50 rounded-md border border-gray-200">
+              <p class="text-gray-800 font-medium">Nouvel utilisateur inscrit : Marie Curie - <span class="text-gray-500 text-sm">il y a 30 min</span></p>
+            </li>
+            <li class="p-3 bg-gray-50 rounded-md border border-gray-200">
+              <p class="text-gray-800 font-medium">Mise à jour du produit "Chambre Deluxe" - <span class="text-gray-500 text-sm">il y a 1 heure</span></p>
+            </li>
+          </ul>
+        </div>
+      </ng-container>
+
+      <!-- Section de gestion des Chambres -->
+      <ng-container *ngIf="currentView === 'rooms'">
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <h3 class="text-2xl font-semibold text-gray-700 mb-4">Gestion des Chambres</h3>
+          <button (click)="showAddRoomForm()" class="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300 mb-4">
+            Ajouter une Nouvelle Chambre
+          </button>
+          <div *ngIf="rooms.length === 0" class="text-gray-500 text-center py-8">
+            Aucune chambre disponible. Cliquez sur "Ajouter une Nouvelle Chambre" pour en créer une.
+          </div>
+          <div *ngIf="rooms.length > 0" class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+              <thead>
+                <tr class="bg-gray-100 text-left text-gray-600 uppercase text-sm leading-normal">
+                  <th class="py-3 px-6 text-left">Image</th>
+                  <th class="py-3 px-6 text-left">Nom</th>
+                  <th class="py-3 px-6 text-left">Prix</th>
+                  <th class="py-3 px-6 text-left">Description</th>
+                  <th class="py-3 px-6 text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="text-gray-700 text-sm">
+                <tr *ngFor="let room of rooms" class="border-b border-gray-200 hover:bg-gray-50">
+                  <td class="py-3 px-6 text-left">
+                    <img [src]="room.imageUrl" alt="{{ room.name }}" class="w-16 h-12 object-cover rounded-md">
+                  </td>
+                  <td class="py-3 px-6 text-left">{{ room.name }}</td>
+                  <td class="py-3 px-6 text-left">{{ room.price }} €</td>
+                  <td class="py-3 px-6 text-left truncate max-w-xs">{{ room.description }}</td>
+                  <td class="py-3 px-6 text-center">
+                    <div class="flex item-center justify-center space-x-2">
+                      <button (click)="editItem('room', room)" class="bg-yellow-500 text-white p-2 rounded-full hover:bg-yellow-600 transition duration-200" title="Modifier">
+                        ✏️
+                      </button>
+                      <button (click)="deleteItem('room', room.id)" class="bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition duration-200" title="Supprimer">
+                        🗑️
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- Section de gestion des Loisirs -->
+      <ng-container *ngIf="currentView === 'leisures'">
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <h3 class="text-2xl font-semibold text-gray-700 mb-4">Gestion des Loisirs</h3>
+          <button (click)="showAddLeisureForm()" class="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition duration-300 mb-4">
+            Ajouter un Nouveau Loisir
+          </button>
+          <div *ngIf="leisures.length === 0" class="text-gray-500 text-center py-8">
+            Aucun loisir disponible. Cliquez sur "Ajouter un Nouveau Loisir" pour en créer un.
+          </div>
+          <div *ngIf="leisures.length > 0" class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+              <thead>
+                <tr class="bg-gray-100 text-left text-gray-600 uppercase text-sm leading-normal">
+                  <th class="py-3 px-6 text-left">Image</th>
+                  <th class="py-3 px-6 text-left">Nom</th>
+                  <th class="py-3 px-6 text-left">Description</th>
+                  <th class="py-3 px-6 text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="text-gray-700 text-sm">
+                <tr *ngFor="let leisure of leisures" class="border-b border-gray-200 hover:bg-gray-50">
+                  <td class="py-3 px-6 text-left">
+                    <img [src]="leisure.imageUrl" alt="{{ leisure.name }}" class="w-16 h-12 object-cover rounded-md">
+                  </td>
+                  <td class="py-3 px-6 text-left">{{ leisure.name }}</td>
+                  <td class="py-3 px-6 text-left truncate max-w-xs">{{ leisure.description }}</td>
+                  <td class="py-3 px-6 text-center">
+                    <div class="flex item-center justify-center space-x-2">
+                      <button (click)="editItem('leisure', leisure)" class="bg-yellow-500 text-white p-2 rounded-full hover:bg-yellow-600 transition duration-200" title="Modifier">
+                        ✏️
+                      </button>
+                      <button (click)="deleteItem('leisure', leisure.id)" class="bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition duration-200" title="Supprimer">
+                        🗑️
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- Section de gestion des Menus -->
+      <ng-container *ngIf="currentView === 'menus'">
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <h3 class="text-2xl font-semibold text-gray-700 mb-4">Gestion des Menus Restaurant</h3>
+          <button (click)="showAddMenuForm()" class="bg-yellow-600 text-white py-2 px-4 rounded-md hover:bg-yellow-700 transition duration-300 mb-4">
+            Ajouter un Nouveau Menu
+          </button>
+          <div *ngIf="menus.length === 0" class="text-gray-500 text-center py-8">
+            Aucun menu disponible. Cliquez sur "Ajouter un Nouveau Menu" pour en créer un.
+          </div>
+          <div *ngIf="menus.length > 0" class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+              <thead>
+                <tr class="bg-gray-100 text-left text-gray-600 uppercase text-sm leading-normal">
+                  <th class="py-3 px-6 text-left">Image</th>
+                  <th class="py-3 px-6 text-left">Nom</th>
+                  <th class="py-3 px-6 text-left">Prix</th>
+                  <th class="py-3 px-6 text-left">Description</th>
+                  <th class="py-3 px-6 text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="text-gray-700 text-sm">
+                <tr *ngFor="let menu of menus" class="border-b border-gray-200 hover:bg-gray-50">
+                  <td class="py-3 px-6 text-left">
+                    <img [src]="menu.imageUrl" alt="{{ menu.name }}" class="w-16 h-12 object-cover rounded-md">
+                  </td>
+                  <td class="py-3 px-6 text-left">{{ menu.name }}</td>
+                  <td class="py-3 px-6 text-left">{{ menu.price }} €</td>
+                  <td class="py-3 px-6 text-left truncate max-w-xs">{{ menu.description }}</td>
+                  <td class="py-3 px-6 text-center">
+                    <div class="flex item-center justify-center space-x-2">
+                      <button (click)="editItem('menu', menu)" class="bg-yellow-500 text-white p-2 rounded-full hover:bg-yellow-600 transition duration-200" title="Modifier">
+                        ✏️
+                      </button>
+                      <button (click)="deleteItem('menu', menu.id)" class="bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition duration-200" title="Supprimer">
+                        🗑️
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- Section de gestion des Jeux -->
+      <ng-container *ngIf="currentView === 'games'">
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <h3 class="text-2xl font-semibold text-gray-700 mb-4">Gestion des Jeux</h3>
+          <button (click)="showAddGameForm()" class="bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 transition duration-300 mb-4">
+            Ajouter un Nouveau Jeu
+          </button>
+          <div *ngIf="games.length === 0" class="text-gray-500 text-center py-8">
+            Aucun jeu disponible. Cliquez sur "Ajouter un Nouveau Jeu" pour en créer un.
+          </div>
+          <div *ngIf="games.length > 0" class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+              <thead>
+                <tr class="bg-gray-100 text-left text-gray-600 uppercase text-sm leading-normal">
+                  <th class="py-3 px-6 text-left">Image</th>
+                  <th class="py-3 px-6 text-left">Nom</th>
+                  <th class="py-3 px-6 text-left">Description</th>
+                  <th class="py-3 px-6 text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="text-gray-700 text-sm">
+                <tr *ngFor="let game of games" class="border-b border-gray-200 hover:bg-gray-50">
+                  <td class="py-3 px-6 text-left">
+                    <img [src]="game.imageUrl" alt="{{ game.name }}" class="w-16 h-12 object-cover rounded-md">
+                  </td>
+                  <td class="py-3 px-6 text-left">{{ game.name }}</td>
+                  <td class="py-3 px-6 text-left truncate max-w-xs">{{ game.description }}</td>
+                  <td class="py-3 px-6 text-center">
+                    <div class="flex item-center justify-center space-x-2">
+                      <button (click)="editItem('game', game)" class="bg-yellow-500 text-white p-2 rounded-full hover:bg-yellow-600 transition duration-200" title="Modifier">
+                        ✏️
+                      </button>
+                      <button (click)="deleteItem('game', game.id)" class="bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition duration-200" title="Supprimer">
+                        🗑️
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- Section de gestion des Piscines -->
+      <ng-container *ngIf="currentView === 'pools'">
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <h3 class="text-2xl font-semibold text-gray-700 mb-4">Gestion des Piscines</h3>
+          <button (click)="showAddPoolForm()" class="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition duration-300 mb-4">
+            Ajouter une Nouvelle Piscine
+          </button>
+          <div *ngIf="pools.length === 0" class="text-gray-500 text-center py-8">
+            Aucune piscine disponible. Cliquez sur "Ajouter une Nouvelle Piscine" pour en créer une.
+          </div>
+          <div *ngIf="pools.length > 0" class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+              <thead>
+                <tr class="bg-gray-100 text-left text-gray-600 uppercase text-sm leading-normal">
+                  <th class="py-3 px-6 text-left">Image</th>
+                  <th class="py-3 px-6 text-left">Nom</th>
+                  <th class="py-3 px-6 text-left">Description</th>
+                  <th class="py-3 px-6 text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="text-gray-700 text-sm">
+                <tr *ngFor="let pool of pools" class="border-b border-gray-200 hover:bg-gray-50">
+                  <td class="py-3 px-6 text-left">
+                    <img [src]="pool.imageUrl" alt="{{ pool.name }}" class="w-16 h-12 object-cover rounded-md">
+                  </td>
+                  <td class="py-3 px-6 text-left">{{ pool.name }}</td>
+                  <td class="py-3 px-6 text-left truncate max-w-xs">{{ pool.description }}</td>
+                  <td class="py-3 px-6 text-center">
+                    <div class="flex item-center justify-center space-x-2">
+                      <button (click)="editItem('pool', pool)" class="bg-yellow-500 text-white p-2 rounded-full hover:bg-yellow-600 transition duration-200" title="Modifier">
+                        ✏️
+                      </button>
+                      <button (click)="deleteItem('pool', pool.id)" class="bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition duration-200" title="Supprimer">
+                        🗑️
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- Section de gestion des Administrateurs -->
+      <ng-container *ngIf="currentView === 'admins'">
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <h3 class="text-2xl font-semibold text-gray-700 mb-4">Gestion des Administrateurs (Total: {{ adminCount }})</h3>
+          <button (click)="showAddAdminForm()" class="bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 transition duration-300 mb-4">
+            Ajouter un Nouvel Administrateur
+          </button>
+          <div *ngIf="admins.length === 0" class="text-gray-500 text-center py-8">
+            Aucun administrateur enregistré. Cliquez sur "Ajouter un Nouvel Administrateur" pour en créer un.
+          </div>
+          <div *ngIf="admins.length > 0" class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+              <thead>
+                <tr class="bg-gray-100 text-left text-gray-600 uppercase text-sm leading-normal">
+                  <th class="py-3 px-6 text-left">Nom</th>
+                  <th class="py-3 px-6 text-left">Email</th>
+                  <th class="py-3 px-6 text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="text-gray-700 text-sm">
+                <tr *ngFor="let admin of admins" class="border-b border-gray-200 hover:bg-gray-50">
+                  <td class="py-3 px-6 text-left">{{ admin.name }}</td>
+                  <td class="py-3 px-6 text-left">{{ admin.email }}</td>
+                  <td class="py-3 px-6 text-center">
+                    <div class="flex item-center justify-center space-x-2">
+                      <button (click)="editItem('admin', admin)" class="bg-yellow-500 text-white p-2 rounded-full hover:bg-yellow-600 transition duration-200" title="Modifier">
+                        ✏️
+                      </button>
+                      <button (click)="deleteItem('admin', admin.id)" class="bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition duration-200" title="Supprimer">
+                        🗑️
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- Formulaires d'ajout (affichés conditionnellement) -->
+      <div *ngIf="currentView === 'addRoom'" class="mt-8 p-6 border rounded-lg bg-white shadow-md">
+        <h3 class="text-2xl font-semibold text-gray-700 mb-4">Ajouter une Nouvelle Chambre</h3>
+        <form (ngSubmit)="submitAddRoomForm()" class="space-y-4">
+          <div>
+            <label for="roomName" class="block text-sm font-medium text-gray-700">Nom de la Chambre</label>
+            <input type="text" id="roomName" [(ngModel)]="roomName" name="roomName" required
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+          </div>
+          <div>
+            <label for="roomPrice" class="block text-sm font-medium text-gray-700">Prix</label>
+            <input type="number" id="roomPrice" [(ngModel)]="roomPrice" name="roomPrice" required
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+          </div>
+          <div>
+            <label for="roomDescription" class="block text-sm font-medium text-gray-700">Description</label>
+            <textarea id="roomDescription" [(ngModel)]="roomDescription" name="roomDescription" rows="3"
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"></textarea>
+          </div>
+          <div>
+            <label for="roomImage" class="block text-sm font-medium text-gray-700">Image de la Chambre</label>
+            <input type="file" id="roomImage" (change)="onFileSelected($event, 'room')" accept="image/*"
+              class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+          </div>
+          <div class="flex space-x-4">
+            <button type="submit"
+              class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+              Ajouter Chambre
+            </button>
+            <button type="button" (click)="cancelAddRoomForm()"
+              class="flex-1 bg-gray-400 text-white py-2 px-4 rounded-md hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2">
+              Annuler
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div *ngIf="currentView === 'addLeisure'" class="mt-8 p-6 border rounded-lg bg-white shadow-md">
+        <h3 class="text-2xl font-semibold text-gray-700 mb-4">Ajouter un Nouveau Loisir</h3>
+        <form (ngSubmit)="submitAddLeisureForm()" class="space-y-4">
+          <div>
+            <label for="leisureName" class="block text-sm font-medium text-gray-700">Nom du Loisir</label>
+            <input type="text" id="leisureName" [(ngModel)]="leisureName" name="leisureName" required
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
+          </div>
+          <div>
+            <label for="leisureDescription" class="block text-sm font-medium text-gray-700">Description</label>
+            <textarea id="leisureDescription" [(ngModel)]="leisureDescription" name="leisureDescription" rows="3"
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"></textarea>
+          </div>
+          <div>
+            <label for="leisureImage" class="block text-sm font-medium text-gray-700">Image du Loisir</label>
+            <input type="file" id="leisureImage" (change)="onFileSelected($event, 'leisure')" accept="image/*"
+              class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100">
+          </div>
+          <div class="flex space-x-4">
+            <button type="submit"
+              class="flex-1 bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+              Ajouter Loisir
+            </button>
+            <button type="button" (click)="cancelAddLeisureForm()"
+              class="flex-1 bg-gray-400 text-white py-2 px-4 rounded-md hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2">
+              Annuler
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div *ngIf="currentView === 'addMenu'" class="mt-8 p-6 border rounded-lg bg-white shadow-md">
+        <h3 class="text-2xl font-semibold text-gray-700 mb-4">Ajouter un Nouveau Menu</h3>
+        <form (ngSubmit)="submitAddMenuForm()" class="space-y-4">
+          <div>
+            <label for="menuName" class="block text-sm font-medium text-gray-700">Nom du Menu</label>
+            <input type="text" id="menuName" [(ngModel)]="menuName" name="menuName" required
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm">
+          </div>
+          <div>
+            <label for="menuPrice" class="block text-sm font-medium text-gray-700">Prix</label>
+            <input type="number" id="menuPrice" [(ngModel)]="menuPrice" name="menuPrice" required
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm">
+          </div>
+          <div>
+            <label for="menuDescription" class="block text-sm font-medium text-gray-700">Description</label>
+            <textarea id="menuDescription" [(ngModel)]="menuDescription" name="menuDescription" rows="3"
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm"></textarea>
+          </div>
+          <div>
+            <label for="menuImage" class="block text-sm font-medium text-gray-700">Image du Menu</label>
+            <input type="file" id="menuImage" (change)="onFileSelected($event, 'menu')" accept="image/*"
+              class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-yellow-50 file:text-yellow-700 hover:file:bg-yellow-100">
+          </div>
+          <div class="flex space-x-4">
+            <button type="submit"
+              class="flex-1 bg-yellow-600 text-white py-2 px-4 rounded-md hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2">
+              Ajouter Menu
+            </button>
+            <button type="button" (click)="cancelAddMenuForm()"
+              class="flex-1 bg-gray-400 text-white py-2 px-4 rounded-md hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2">
+              Annuler
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div *ngIf="currentView === 'addGame'" class="mt-8 p-6 border rounded-lg bg-white shadow-md">
+        <h3 class="text-2xl font-semibold text-gray-700 mb-4">Ajouter un Nouveau Jeu</h3>
+        <form (ngSubmit)="submitAddGameForm()" class="space-y-4">
+          <div>
+            <label for="gameName" class="block text-sm font-medium text-gray-700">Nom du Jeu</label>
+            <input type="text" id="gameName" [(ngModel)]="gameName" name="gameName" required
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
+          </div>
+          <div>
+            <label for="gameDescription" class="block text-sm font-medium text-gray-700">Description</label>
+            <textarea id="gameDescription" [(ngModel)]="gameDescription" name="gameDescription" rows="3"
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"></textarea>
+          </div>
+          <div>
+            <label for="gameImage" class="block text-sm font-medium text-gray-700">Image du Jeu</label>
+            <input type="file" id="gameImage" (change)="onFileSelected($event, 'game')" accept="image/*"
+              class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100">
+          </div>
+          <div class="flex space-x-4">
+            <button type="submit"
+              class="flex-1 bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
+              Ajouter Jeu
+            </button>
+            <button type="button" (click)="cancelAddGameForm()"
+              class="flex-1 bg-gray-400 text-white py-2 px-4 rounded-md hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2">
+              Annuler
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div *ngIf="currentView === 'addPool'" class="mt-8 p-6 border rounded-lg bg-white shadow-md">
+        <h3 class="text-2xl font-semibold text-gray-700 mb-4">Ajouter une Nouvelle Piscine</h3>
+        <form (ngSubmit)="submitAddPoolForm()" class="space-y-4">
+          <div>
+            <label for="poolName" class="block text-sm font-medium text-gray-700">Nom de la Piscine</label>
+            <input type="text" id="poolName" [(ngModel)]="poolName" name="poolName" required
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+          </div>
+          <div>
+            <label for="poolDescription" class="block text-sm font-medium text-gray-700">Description</label>
+            <textarea id="poolDescription" [(ngModel)]="poolDescription" name="poolDescription" rows="3"
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
+          </div>
+          <div>
+            <label for="poolImage" class="block text-sm font-medium text-gray-700">Image de la Piscine</label>
+            <input type="file" id="poolImage" (change)="onFileSelected($event, 'pool')" accept="image/*"
+              class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+          </div>
+          <div class="flex space-x-4">
+            <button type="submit"
+              class="flex-1 bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+              Ajouter Piscine
+            </button>
+            <button type="button" (click)="cancelAddPoolForm()"
+              class="flex-1 bg-gray-400 text-white py-2 px-4 rounded-md hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2">
+              Annuler
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div *ngIf="currentView === 'addAdmin'" class="mt-8 p-6 border rounded-lg bg-white shadow-md">
+        <h3 class="text-2xl font-semibold text-gray-700 mb-4">Ajouter un Nouvel Administrateur</h3>
+        <form (ngSubmit)="submitAddAdminForm()" class="space-y-4">
+          <div>
+            <label for="newAdminName" class="block text-sm font-medium text-gray-700">Nom</label>
+            <input type="text" id="newAdminName" [(ngModel)]="newAdminName" name="newAdminName" required
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm">
+          </div>
+          <div>
+            <label for="newAdminEmail" class="block text-sm font-medium text-gray-700">Email</label>
+            <input type="email" id="newAdminEmail" [(ngModel)]="newAdminEmail" name="newAdminEmail" required
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm">
+          </div>
+          <div>
+            <label for="newAdminPassword" class="block text-sm font-medium text-gray-700">Mot de Passe</label>
+            <input type="password" id="newAdminPassword" [(ngModel)]="newAdminPassword" name="newAdminPassword" required
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm">
+          </div>
+          <div class="flex space-x-4">
+            <button type="submit"
+              class="flex-1 bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+              Ajouter Administrateur
+            </button>
+            <button type="button" (click)="cancelAddAdminForm()"
+              class="flex-1 bg-gray-400 text-white py-2 px-4 rounded-md hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2">
+              Annuler
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Formulaires de modification (affichés conditionnellement) -->
+      <div *ngIf="currentView === 'editRoom' && editingRoom" class="mt-8 p-6 border rounded-lg bg-white shadow-md">
+        <h3 class="text-2xl font-semibold text-gray-700 mb-4">Modifier Chambre: {{ editingRoom.name }}</h3>
+        <form (ngSubmit)="submitEditRoomForm()" class="space-y-4">
+          <div>
+            <label for="editRoomName" class="block text-sm font-medium text-gray-700">Nom de la Chambre</label>
+            <input type="text" id="editRoomName" [(ngModel)]="editingRoom.name" name="editRoomName" required
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+          </div>
+          <div>
+            <label for="editRoomPrice" class="block text-sm font-medium text-gray-700">Prix</label>
+            <input type="number" id="editRoomPrice" [(ngModel)]="editingRoom.price" name="editRoomPrice" required
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+          </div>
+          <div>
+            <label for="editRoomDescription" class="block text-sm font-medium text-gray-700">Description</label>
+            <textarea id="editRoomDescription" [(ngModel)]="editingRoom.description" name="editRoomDescription" rows="3"
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"></textarea>
+          </div>
+          <div>
+            <label for="editRoomImage" class="block text-sm font-medium text-gray-700">Image de la Chambre</label>
+            <input type="file" id="editRoomImage" (change)="onFileSelected($event, 'room')" accept="image/*"
+              class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+            <div *ngIf="editingRoom.imageUrl" class="mt-2">
+              <img [src]="editingRoom.imageUrl" alt="Image actuelle" class="w-24 h-auto rounded-md">
+            </div>
+          </div>
+          <div class="flex space-x-4">
+            <button type="submit"
+              class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+              Modifier Chambre
+            </button>
+            <button type="button" (click)="cancelEditRoomForm()"
+              class="flex-1 bg-gray-400 text-white py-2 px-4 rounded-md hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2">
+              Annuler
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div *ngIf="currentView === 'editLeisure' && editingLeisure" class="mt-8 p-6 border rounded-lg bg-white shadow-md">
+        <h3 class="text-2xl font-semibold text-gray-700 mb-4">Modifier Loisir: {{ editingLeisure.name }}</h3>
+        <form (ngSubmit)="submitEditLeisureForm()" class="space-y-4">
+          <div>
+            <label for="editLeisureName" class="block text-sm font-medium text-gray-700">Nom du Loisir</label>
+            <input type="text" id="editLeisureName" [(ngModel)]="editingLeisure.name" name="editLeisureName" required
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
+          </div>
+          <div>
+            <label for="editLeisureDescription" class="block text-sm font-medium text-gray-700">Description</label>
+            <textarea id="editLeisureDescription" [(ngModel)]="editingLeisure.description" name="editLeisureDescription" rows="3"
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"></textarea>
+          </div>
+          <div>
+            <label for="editLeisureImage" class="block text-sm font-medium text-gray-700">Image du Loisir</label>
+            <input type="file" id="editLeisureImage" (change)="onFileSelected($event, 'leisure')" accept="image/*"
+              class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100">
+            <div *ngIf="editingLeisure.imageUrl" class="mt-2">
+              <img [src]="editingLeisure.imageUrl" alt="Image actuelle" class="w-24 h-auto rounded-md">
+            </div>
+          </div>
+          <div class="flex space-x-4">
+            <button type="submit"
+              class="flex-1 bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+              Modifier Loisir
+            </button>
+            <button type="button" (click)="cancelEditLeisureForm()"
+              class="flex-1 bg-gray-400 text-white py-2 px-4 rounded-md hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2">
+              Annuler
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div *ngIf="currentView === 'editMenu' && editingMenu" class="mt-8 p-6 border rounded-lg bg-white shadow-md">
+        <h3 class="text-2xl font-semibold text-gray-700 mb-4">Modifier Menu: {{ editingMenu.name }}</h3>
+        <form (ngSubmit)="submitEditMenuForm()" class="space-y-4">
+          <div>
+            <label for="editMenuName" class="block text-sm font-medium text-gray-700">Nom du Menu</label>
+            <input type="text" id="editMenuName" [(ngModel)]="editingMenu.name" name="editMenuName" required
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm">
+          </div>
+          <div>
+            <label for="editMenuPrice" class="block text-sm font-medium text-gray-700">Prix</label>
+            <input type="number" id="editMenuPrice" [(ngModel)]="editingMenu.price" name="editMenuPrice" required
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm">
+          </div>
+          <div>
+            <label for="editMenuDescription" class="block text-sm font-medium text-gray-700">Description</label>
+            <textarea id="editMenuDescription" [(ngModel)]="editingMenu.description" name="editMenuDescription" rows="3"
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm"></textarea>
+          </div>
+          <div>
+            <label for="editMenuImage" class="block text-sm font-medium text-gray-700">Image du Menu</label>
+            <input type="file" id="editMenuImage" (change)="onFileSelected($event, 'menu')" accept="image/*"
+              class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-yellow-50 file:text-yellow-700 hover:file:bg-yellow-100">
+            <div *ngIf="editingMenu.imageUrl" class="mt-2">
+              <img [src]="editingMenu.imageUrl" alt="Image actuelle" class="w-24 h-auto rounded-md">
+            </div>
+          </div>
+          <div class="flex space-x-4">
+            <button type="submit"
+              class="flex-1 bg-yellow-600 text-white py-2 px-4 rounded-md hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2">
+              Modifier Menu
+            </button>
+            <button type="button" (click)="cancelEditMenuForm()"
+              class="flex-1 bg-gray-400 text-white py-2 px-4 rounded-md hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2">
+              Annuler
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div *ngIf="currentView === 'editGame' && editingGame" class="mt-8 p-6 border rounded-lg bg-white shadow-md">
+        <h3 class="text-2xl font-semibold text-gray-700 mb-4">Modifier Jeu: {{ editingGame.name }}</h3>
+        <form (ngSubmit)="submitEditGameForm()" class="space-y-4">
+          <div>
+            <label for="editGameName" class="block text-sm font-medium text-gray-700">Nom du Jeu</label>
+            <input type="text" id="editGameName" [(ngModel)]="editingGame.name" name="editGameName" required
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
+          </div>
+          <div>
+            <label for="editGameDescription" class="block text-sm font-medium text-gray-700">Description</label>
+            <textarea id="editGameDescription" [(ngModel)]="editingGame.description" name="editGameDescription" rows="3"
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"></textarea>
+          </div>
+          <div>
+            <label for="editGameImage" class="block text-sm font-medium text-gray-700">Image du Jeu</label>
+            <input type="file" id="editGameImage" (change)="onFileSelected($event, 'game')" accept="image/*"
+              class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100">
+            <div *ngIf="editingGame.imageUrl" class="mt-2">
+              <img [src]="editingGame.imageUrl" alt="Image actuelle" class="w-24 h-auto rounded-md">
+            </div>
+          </div>
+          <div class="flex space-x-4">
+            <button type="submit"
+              class="flex-1 bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
+              Modifier Jeu
+            </button>
+            <button type="button" (click)="cancelEditGameForm()"
+              class="flex-1 bg-gray-400 text-white py-2 px-4 rounded-md hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2">
+              Annuler
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div *ngIf="currentView === 'editPool' && editingPool" class="mt-8 p-6 border rounded-lg bg-white shadow-md">
+        <h3 class="text-2xl font-semibold text-gray-700 mb-4">Modifier Piscine: {{ editingPool.name }}</h3>
+        <form (ngSubmit)="submitEditPoolForm()" class="space-y-4">
+          <div>
+            <label for="editPoolName" class="block text-sm font-medium text-gray-700">Nom de la Piscine</label>
+            <input type="text" id="editPoolName" [(ngModel)]="editingPool.name" name="editPoolName" required
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+          </div>
+          <div>
+            <label for="editPoolDescription" class="block text-sm font-medium text-gray-700">Description</label>
+            <textarea id="editPoolDescription" [(ngModel)]="editingPool.description" name="editPoolDescription" rows="3"
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
+          </div>
+          <div>
+            <label for="editPoolImage" class="block text-sm font-medium text-gray-700">Image de la Piscine</label>
+            <input type="file" id="editPoolImage" (change)="onFileSelected($event, 'pool')" accept="image/*"
+              class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+            <div *ngIf="editingPool.imageUrl" class="mt-2">
+              <img [src]="editingPool.imageUrl" alt="Image actuelle" class="w-24 h-auto rounded-md">
+            </div>
+          </div>
+          <div class="flex space-x-4">
+            <button type="submit"
+              class="flex-1 bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+              Modifier Piscine
+            </button>
+            <button type="button" (click)="cancelEditPoolForm()"
+              class="flex-1 bg-gray-400 text-white py-2 px-4 rounded-md hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2">
+              Annuler
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div *ngIf="currentView === 'editAdmin' && editingAdmin" class="mt-8 p-6 border rounded-lg bg-white shadow-md">
+        <h3 class="text-2xl font-semibold text-gray-700 mb-4">Modifier Administrateur: {{ editingAdmin.name }}</h3>
+        <form (ngSubmit)="submitEditAdminForm()" class="space-y-4">
+          <div>
+            <label for="editAdminName" class="block text-sm font-medium text-gray-700">Nom</label>
+            <input type="text" id="editAdminName" [(ngModel)]="editingAdmin.name" name="editAdminName" required
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm">
+          </div>
+          <div>
+            <label for="editAdminEmail" class="block text-sm font-medium text-gray-700">Email</label>
+            <input type="email" id="editAdminEmail" [(ngModel)]="editingAdmin.email" name="editAdminEmail" required
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm">
+          </div>
+          <div class="flex space-x-4">
+            <button type="submit"
+              class="flex-1 bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+              Modifier Administrateur
+            </button>
+            <button type="button" (click)="cancelEditAdminForm()"
+              class="flex-1 bg-gray-400 text-white py-2 px-4 rounded-md hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2">
+              Annuler
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </main>
 </div>

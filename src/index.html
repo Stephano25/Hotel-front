@@ -1,13 +1,52 @@
+<!-- src/index.html -->
 <!doctype html>
-<html lang="en">
+<html lang="fr">
 <head>
   <meta charset="utf-8">
-  <title>AuthFrontend</title>
+  <title>Mon App Hôtel</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome CDN for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* Custom styles for smooth scroll behavior */
+    html {
+        scroll-behavior: smooth;
+    }
+    /* Cache le bouton par défaut, il sera affiché via JS lors du défilement */
+    #scrollToTopBtn {
+        display: none;
+    }
+  </style>
 </head>
 <body>
   <app-root></app-root>
+  <!-- Le script JavaScript pour le bouton "Retour en haut" doit être ici ou dans un fichier .ts de composant -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const scrollToTopBtn = document.getElementById("scrollToTopBtn");
+        if (scrollToTopBtn) {
+            function toggleScrollToTopButton() {
+                const scrollPosition = window.scrollY || document.documentElement.scrollTop;
+                if (scrollPosition > 50) {
+                    scrollToTopBtn.style.display = "block";
+                } else {
+                    scrollToTopBtn.style.display = "none";
+                }
+            }
+            window.addEventListener("scroll", toggleScrollToTopButton);
+            toggleScrollToTopButton();
+            scrollToTopBtn.addEventListener("click", function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
+                });
+            });
+        }
+    });
+  </script>
 </body>
 </html>

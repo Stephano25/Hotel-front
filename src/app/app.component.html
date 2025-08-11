@@ -1,0 +1,94 @@
+<!-- src/app/app.component.html -->
+<div class="min-h-screen flex flex-col font-sans">
+  <!-- Header fixe - Affiché seulement si ce n'est PAS la route du tableau de bord -->
+  <header *ngIf="!isDashboardRoute()" class="fixed top-0 left-0 w-full p-4 shadow-lg rounded-b-lg z-50 transition-all duration-300 ease-in-out
+                       " [ngClass]="{'bg-blue-600 text-white': !isScrolled,
+                                     'bg-blue-600/75 backdrop-blur-sm text-white': isScrolled}">
+    <nav class="container mx-auto flex justify-between items-center">
+      <!-- Conteneur pour le logo/nom de l'application et les liens de navigation de gauche -->
+      <div class="flex items-center space-x-4">
+        <a routerLink="/home" class="text-2xl font-bold tracking-tight hover:text-blue-200 transition-colors duration-300">Mon App Hôtel</a>
+
+        <!-- Liens de navigation principaux -->
+        <a routerLink="/home" routerLinkActive="font-semibold text-blue-200" ariaCurrentWhenActive="page"
+           class="text-lg hover:text-blue-200 transition-colors duration-300 px-3 py-1 rounded-md">Accueil</a>
+
+        <a routerLink="/rooms" routerLinkActive="font-semibold text-blue-200" ariaCurrentWhenActive="page"
+           class="text-lg hover:text-blue-200 transition-colors duration-300 px-3 py-1 rounded-md">Nos Chambres</a>
+
+        <a routerLink="/restaurant" routerLinkActive="font-semibold text-blue-200" ariaCurrentWhenActive="page"
+           class="text-lg hover:text-blue-200 transition-colors duration-300 px-3 py-1 rounded-md">Restaurant</a>
+
+        <a routerLink="/pool" routerLinkActive="font-semibold text-blue-200" ariaCurrentWhenActive="page"
+           class="text-lg hover:text-blue-200 transition-colors duration-300 px-3 py-1 rounded-md">Piscine</a>
+
+        <a routerLink="/sports-leisure" routerLinkActive="font-semibold text-blue-200" ariaCurrentWhenActive="page"
+           class="text-lg hover:text-blue-200 transition-colors duration-300 px-3 py-1 rounded-md">Sports & Loisirs</a>
+
+        <!-- Lien vers le Dashboard Admin (visible seulement pour les admins) -->
+        <ng-container *ngIf="(userRole$ | async) === 'admin'">
+          <a routerLink="/dashboard" routerLinkActive="font-semibold text-blue-200" ariaCurrentWhenActive="page"
+             class="text-lg hover:text-blue-200 transition-colors duration-300 px-3 py-1 rounded-md font-bold">Admin Dashboard</a>
+        </ng-container>
+      </div>
+
+      <!-- Boutons Se Connecter / S'inscrire / Se Déconnecter à droite -->
+      <div class="space-x-4 flex items-center">
+        <!-- Afficher Se Connecter / S'inscrire si l'utilisateur n'est PAS connecté -->
+        <ng-container *ngIf="!authService.isLoggedIn()">
+          <a routerLink="/login" routerLinkActive="font-semibold text-blue-200" ariaCurrentWhenActive="page"
+             class="text-lg hover:text-blue-200 transition-colors duration-300 px-3 py-1 rounded-md">Se Connecter</a>
+          <a routerLink="/register" routerLinkActive="font-semibold text-blue-200" ariaCurrentWhenActive="page"
+             class="text-lg hover:text-blue-200 transition-colors duration-300 px-3 py-1 rounded-md">S'inscrire</a>
+        </ng-container>
+
+        <!-- Afficher Se Déconnecter si l'utilisateur est connecté -->
+        <ng-container *ngIf="authService.isLoggedIn()">
+          <button (click)="logout()"
+                  class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-full shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-75">
+            Se Déconnecter
+          </button>
+        </ng-container>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main content avec padding pour éviter le chevauchement avec le header fixe -->
+  <!-- Les classes de conteneur sont appliquées seulement si le header est visible -->
+  <main class="flex-grow"
+        [ngClass]="{'pt-20 container mx-auto p-6 flex items-center justify-center': !isDashboardRoute(), 'w-full h-full': isDashboardRoute()}">
+    <!-- Ceci est le point où les composants routés seront affichés -->
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- Footer - Affiché seulement si ce n'est PAS la route du tableau de bord -->
+  <footer *ngIf="!isDashboardRoute()" class="bg-gray-800 text-white p-4 text-center rounded-t-lg shadow-inner">
+    <p>&copy; 2025 Mon App Hôtel. Tous droits réservés.</p>
+    <p>&copy; Téléphone : 038 64 074 32 / 033 66 031 33 </p>
+  </footer>
+
+  <!-- Boutons de contact fixes (en bas à gauche) - Conditionnellement affichés -->
+  <div *ngIf="shouldShowFixedButtons() && !isDashboardRoute()" class="fixed bottom-6 left-6 flex flex-col space-y-4 z-50">
+    <a href="https://wa.me/YOUR_PHONE_NUMBER" target="_blank" class="bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg
+                               transform transition-transform duration-300 hover:scale-110 focus:outline-none focus:ring-4 focus:ring-green-500 focus:ring-opacity-50"
+       aria-label="Contactez-nous sur WhatsApp">
+      <i class="fab fa-whatsapp text-2xl"></i>
+    </a>
+    <a href="https://www.facebook.com/YOUR_FACEBOOK_PAGE" target="_blank" class="bg-blue-700 hover:bg-blue-800 text-white p-4 rounded-full shadow-lg
+                               transform transition-transform duration-300 hover:scale-110 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-opacity-50"
+       aria-label="Suivez-nous sur Facebook">
+      <i class="fab fa-facebook-f text-2xl"></i>
+    </a>
+  </div>
+
+  <!-- Bouton "Retour en haut" fixe (en bas à droite) - Conditionnellement affiché -->
+  <button *ngIf="shouldShowFixedButtons() && !isDashboardRoute()" (click)="scrollToTop()"
+          [ngClass]="{'block': showScrollToTop, 'hidden': !showScrollToTop}"
+          class="fixed bottom-6 right-6 bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg
+                 transform transition-transform duration-300 hover:scale-110 focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 z-50"
+          aria-label="Revenir en haut de la page">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+    </svg>
+  </button>
+</div>

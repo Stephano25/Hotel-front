@@ -1,0 +1,111 @@
+<!-- src/app/hotel-home/hotel-home.component.html -->
+<!-- Les boutons fixes et le script de défilement ont été déplacés vers app.component.html -->
+
+<div class="w-full max-w-6xl mx-auto bg-white rounded-lg shadow-xl overflow-hidden">
+
+    <!-- Section Héro (Hero Section) -->
+    <section id="hero-section" class="relative h-96 bg-cover bg-center"
+             style="background-image: url('https://placehold.co/1200x500/A7D9F7/000000?text=Bienvenue+à+l\'Hôtel+XYZ');">
+        <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center p-6">
+            <div class="text-center text-white">
+                <h1 class="text-5xl md:text-6xl font-extrabold mb-4 drop-shadow-lg">
+                    Votre Séjour de Rêve Commence Ici
+                </h1>
+                <p class="text-xl md:text-2xl mb-8 font-light">
+                    Luxe, Confort et Service Exceptionnel
+                </p>
+                <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg
+                               transform transition-transform duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50">
+                    Réserver Maintenant
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section À Propos (About Section) -->
+    <section class="py-12 px-6 md:px-12 text-center">
+        <h2 class="text-4xl font-bold text-blue-800 mb-6">Découvrez Notre Hôtel</h2>
+        <p class="text-lg text-gray-700 leading-relaxed max-w-3xl mx-auto">
+            Nichée au cœur d'un paysage pittoresque, l'Hôtel XYZ offre une expérience inégalée de luxe et de détente.
+            Avec des chambres élégamment aménagées, une cuisine exquise et un service impeccable, nous nous engageons
+            à rendre votre séjour mémorable. Que vous soyez en voyage d'affaires ou en vacances, notre hôtel est votre
+            refuge parfait.
+        </p>
+    </section>
+
+    <!-- Section Nos Chambres (Rooms Section) -->
+    <section class="bg-gray-50 py-12 px-6 md:px-12">
+        <h2 class="text-4xl font-bold text-blue-800 text-center mb-10">Nos Chambres & Suites</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Chambre Standard -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105">
+                <img src="https://placehold.co/600x400/D4E6F1/000000?text=Chambre+Standard" alt="Chambre Standard" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-2">Chambre Standard</h3>
+                    <p class="text-gray-600 mb-4">Confortable et élégante, parfaite pour un court séjour.</p>
+                    <span class="text-blue-600 font-bold text-xl">À partir de 120€/nuit</span>
+                </div>
+            </div>
+            <!-- Chambre Deluxe -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105">
+                <img src="https://placehold.co/600x400/B2DCEF/000000?text=Chambre+Deluxe" alt="Chambre Deluxe" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-2">Chambre Deluxe</h3>
+                    <p class="text-gray-600 mb-4">Plus spacieuse avec vue imprenable sur la ville.</p>
+                    <span class="text-blue-600 font-bold text-xl">À partir de 180€/nuit</span>
+                </div>
+            </div>
+            <!-- Suite Présidentielle -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105">
+                <img src="https://placehold.co/600x400/8ECDE8/000000?text=Suite+Présidentielle" alt="Suite Présidentielle" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-2">Suite Présidentielle</h3>
+                    <p class="text-gray-600 mb-4">Le summum du luxe avec des équipements haut de gamme.</p>
+                    <span class="text-blue-600 font-bold text-xl">À partir de 450€/nuit</span>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-10">
+            <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg
+                           transform transition-transform duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50">
+                Voir Toutes les Chambres
+            </button>
+        </div>
+    </section>
+
+    <!-- Section Nos Services (Amenities Section) -->
+    <section class="py-12 px-6 md:px-12 text-center">
+        <h2 class="text-4xl font-bold text-blue-800 mb-10">Nos Services</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+            <div class="flex flex-col items-center p-4 bg-gray-50 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+                <svg class="w-12 h-12 text-blue-600 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"></path></svg>
+                <p class="text-lg font-semibold text-gray-800">Piscine</p>
+            </div>
+            <div class="flex flex-col items-center p-4 bg-gray-50 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+                <svg class="w-12 h-12 text-blue-600 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h-4a2 2 0 01-2-2V8a2 2 0 012-2h4a2 2 0 012 2v10a2 2 0 01-2 2z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18v2m0-10V4m-4 8H4m16 0h-4"></path></svg>
+                <p class="text-lg font-semibold text-gray-800">Restaurant</p>
+            </div>
+            <div class="flex flex-col items-center p-4 bg-gray-50 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+                <svg class="w-12 h-12 text-blue-600 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c1.657 0 3 .895 3 2s-1.343 2-3 2-3-.895-3-2 1.343-2 3-2z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                <p class="text-lg font-semibold text-gray-800">Spa & Bien-être</p>
+            </div>
+            <div class="flex flex-col items-center p-4 bg-gray-50 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+                <svg class="w-12 h-12 text-blue-600 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 10h.01M19 10h.01M12 10h.01M12 14h.01M12 18h.01"></path></svg>
+                <p class="text-lg font-semibold text-gray-800">Wi-Fi Gratuit</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Appel à l'action final (Final Call to Action) -->
+    <section class="bg-blue-700 text-white py-12 px-6 md:px-12 text-center rounded-b-lg">
+        <h2 class="text-4xl font-bold mb-6">Prêt à Réserver Votre Séjour ?</h2>
+        <p class="text-xl mb-8">
+            Contactez-nous dès aujourd'hui pour des offres personnalisées et une expérience inoubliable.
+        </p>
+        <button class="bg-white hover:bg-gray-200 text-blue-700 font-bold py-3 px-8 rounded-full shadow-lg
+                       transform transition-transform duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-white focus:ring-opacity-50">
+            Contactez-nous
+        </button>
+    </section>
+
+</div>
