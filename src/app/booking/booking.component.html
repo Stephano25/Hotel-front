@@ -1,0 +1,23 @@
+<form (ngSubmit)="onSubmit()">
+  <div>
+    <label for="name">Votre nom</label>
+    <input id="name" type="text" [(ngModel)]="newBooking.name" name="name" required>
+  </div>
+  <div>
+    <label for="email">Votre email</label>
+    <input id="email" type="email" [(ngModel)]="newBooking.email" name="email" required>
+  </div>
+  <div>
+    <label for="roomName">Nom de la chambre</label>
+    <input id="roomName" type="text" [(ngModel)]="newBooking.roomName" name="roomName" required>
+  </div>
+  <div>
+    <label for="checkInDate">Date d'arrivée</label>
+    <input id="checkInDate" type="date" [(ngModel)]="newBooking.checkInDate" name="checkInDate" required>
+  </div>
+  <div>
+    <label for="checkOutDate">Date de départ</label>
+    <input id="checkOutDate" type="date" [(ngModel)]="newBooking.checkOutDate" name="checkOutDate" required>
+  </div>
+  <button type="submit">Confirmer la réservation</button>
+</form>

@@ -1,0 +1,23 @@
+<div>
+  <h2>Liste des réservations</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Email</th>
+        <th>Chambre</th>
+        <th>Arrivée</th>
+        <th>Départ</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let booking of bookings">
+        <td>{{ booking.name }}</td>
+        <td>{{ booking.email }}</td>
+        <td>{{ booking.roomName }}</td>
+        <td>{{ booking.checkInDate | date }}</td>
+        <td>{{ booking.checkOutDate | date }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,20 +1,51 @@
 // src/app/hotel-home/hotel-home.component.ts
+
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common'; // Assurez-vous d'importer CommonModule si vous utilisez des directives Angular (*ngIf, *ngFor, etc.)
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { CommonModule } from '@angular/common'; 
+import { environment } from '../../environments/environment'; 
+import { catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-hotel-home',
-  standalone: true, // Indique que c'est un composant autonome
-  imports: [CommonModule], // Ajoutez CommonModule ici
   templateUrl: './hotel-home.component.html',
-  styleUrls: ['./hotel-home.component.css']
+  styleUrls: ['./hotel-home.component.css'],
+  standalone: true, 
+  imports: [CommonModule]
 })
 export class HotelHomeComponent implements OnInit {
+  hotelData: any; 
+  error: string | null = null;
+  loading = true;
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
-    // Vous pouvez ajouter ici la logique pour charger des données
-    // ou initialiser des éléments si nécessaire.
+    this.fetchHotelData();
+  }
+
+  fetchHotelData() {
+    this.loading = true;
+    this.http.get<any>(`${environment.apiUrl}/hotel`)
+      .pipe(
+        catchError((err: HttpErrorResponse) => {
+          console.error('Erreur lors de la récupération des données de l\'hôtel', err);
+          if (err.status === 401) {
+            this.error = 'Non autorisé. Veuillez vous connecter.';
+          } else {
+            this.error = 'Impossible de charger les données de l\'hôtel.';
+          }
+          this.loading = false;
+          return of(null);
+        })
+      )
+      .subscribe((data) => {
+        if (data) {
+          this.hotelData = data;
+          this.error = null;
+        }
+        this.loading = false;
+      });
   }
 }

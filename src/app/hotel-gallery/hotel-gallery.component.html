@@ -1,0 +1,9 @@
+<div class="gallery-container">
+  <div *ngFor="let image of galleryImages" class="gallery-item">
+    <img [src]="image.imageUrl" [alt]="image.description">
+    <p>{{ image.description }}</p>
+  </div>
+</div>
+<div *ngIf="galleryImages.length === 0">
+  <p>Aucune image n'est disponible dans la galerie pour le moment.</p>
+</div>

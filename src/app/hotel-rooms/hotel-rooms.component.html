@@ -1,93 +1,23 @@
-<!-- src/app/hotel-rooms/hotel-rooms.component.html -->
-<div class="w-full max-w-6xl mx-auto bg-white rounded-lg shadow-xl overflow-hidden p-6 md:p-12">
-    <h1 class="text-4xl md:text-5xl font-extrabold text-blue-800 text-center mb-10">Nos Chambres Disponibles</h1>
-    <p class="text-lg text-gray-700 leading-relaxed text-center mb-12 max-w-3xl mx-auto">
-        Découvrez notre sélection de chambres et suites, conçues pour votre confort et votre détente. Chaque espace est une invitation au bien-être.
-    </p>
+<div *ngIf="isLoading" class="loading-message">
+  <p>Chargement des chambres...</p>
+</div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <!-- Chambre Standard -->
-        <div class="bg-gray-50 rounded-lg shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105">
-            <img src="https://placehold.co/600x400/D4E6F1/000000?text=Chambre+Standard" alt="Chambre Standard" class="w-full h-48 object-cover">
-            <div class="p-6">
-                <h3 class="text-2xl font-semibold text-gray-800 mb-2">Chambre Standard</h3>
-                <p class="text-gray-600 mb-4">
-                    Confortable et élégante, notre Chambre Standard est parfaite pour un court séjour. Elle dispose d'un lit double, d'une salle de bain privative et de toutes les commodités modernes.
-                </p>
-                <ul class="text-gray-600 text-sm mb-4 list-disc list-inside">
-                    <li>Lit double</li>
-                    <li>Wi-Fi gratuit</li>
-                    <li>Télévision écran plat</li>
-                    <li>Climatisation</li>
-                </ul>
-                <span class="text-blue-600 font-bold text-xl">À partir de 120€/nuit</span>
-                <button class="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full shadow-md">
-                    Réserver
-                </button>
-            </div>
-        </div>
+<div *ngIf="error" class="error-message">
+  <p>{{ error }}</p>
+</div>
 
-        <!-- Chambre Deluxe -->
-        <div class="bg-gray-50 rounded-lg shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105">
-            <img src="https://placehold.co/600x400/B2DCEF/000000?text=Chambre+Deluxe" alt="Chambre Deluxe" class="w-full h-48 object-cover">
-            <div class="p-6">
-                <h3 class="text-2xl font-semibold text-gray-800 mb-2">Chambre Deluxe</h3>
-                <p class="text-gray-600 mb-4">
-                    Plus spacieuse, notre Chambre Deluxe offre une vue imprenable sur la ville ou le jardin. Idéale pour les séjours plus longs, elle combine espace et luxe.
-                </p>
-                <ul class="text-gray-600 text-sm mb-4 list-disc list-inside">
-                    <li>Lit King-size</li>
-                    <li>Vue panoramique</li>
-                    <li>Mini-bar</li>
-                    <li>Coin salon</li>
-                </ul>
-                <span class="text-blue-600 font-bold text-xl">À partir de 180€/nuit</span>
-                <button class="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full shadow-md">
-                    Réserver
-                </button>
-            </div>
-        </div>
+<div *ngIf="!isLoading && rooms.length > 0" class="room-list">
+  <div *ngFor="let room of rooms" class="room-card">
+    <img [src]="room.imageUrl" [alt]="room.name">
+    <h3>{{ room.name }}</h3>
+    <p>{{ room.description }}</p>
+    <p>Prix : {{ room.price }} €/nuit</p>
+    <ul *ngIf="room.amenities && room.amenities.length > 0">
+      <li *ngFor="let amenity of room.amenities">{{ amenity }}</li>
+    </ul>
+  </div>
+</div>
 
-        <!-- Suite Junior -->
-        <div class="bg-gray-50 rounded-lg shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105">
-            <img src="https://placehold.co/600x400/A7D9F7/000000?text=Suite+Junior" alt="Suite Junior" class="w-full h-48 object-cover">
-            <div class="p-6">
-                <h3 class="text-2xl font-semibold text-gray-800 mb-2">Suite Junior</h3>
-                <p class="text-gray-600 mb-4">
-                    Profitez d'un espace de vie séparé dans notre Suite Junior, parfaite pour les familles ou ceux qui recherchent plus d'intimité.
-                </p>
-                <ul class="text-gray-600 text-sm mb-4 list-disc list-inside">
-                    <li>Lit King-size + canapé-lit</li>
-                    <li>Espace salon séparé</li>
-                    <li>Machine à café Nespresso</li>
-                    <li>Peignoirs et chaussons</li>
-                </ul>
-                <span class="text-blue-600 font-bold text-xl">À partir de 250€/nuit</span>
-                <button class="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full shadow-md">
-                    Réserver
-                </button>
-            </div>
-        </div>
-
-        <!-- Suite Présidentielle -->
-        <div class="bg-gray-50 rounded-lg shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105">
-            <img src="https://placehold.co/600x400/8ECDE8/000000?text=Suite+Présidentielle" alt="Suite Présidentielle" class="w-full h-48 object-cover">
-            <div class="p-6">
-                <h3 class="text-2xl font-semibold text-gray-800 mb-2">Suite Présidentielle</h3>
-                <p class="text-gray-600 mb-4">
-                    Le summum du luxe et du confort. Notre Suite Présidentielle offre des équipements haut de gamme et un service personnalisé.
-                </p>
-                <ul class="text-gray-600 text-sm mb-4 list-disc list-inside">
-                    <li>Deux chambres séparées</li>
-                    <li>Cuisine équipée</li>
-                    <li>Jacuzzi privé</li>
-                    <li>Service de majordome</li>
-                </ul>
-                <span class="text-blue-600 font-bold text-xl">À partir de 450€/nuit</span>
-                <button class="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full shadow-md">
-                    Réserver
-                </button>
-            </div>
-        </div>
-    </div>
+<div *ngIf="!isLoading && rooms.length === 0" class="no-rooms-message">
+  <p>Aucune chambre n'est disponible pour le moment.</p>
 </div>

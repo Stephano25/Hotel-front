@@ -1,0 +1,19 @@
+<form>
+  <div>
+    <label for="name">Nom de la chambre</label>
+    <input id="name" type="text" [(ngModel)]="newRoom.name" name="name" required>
+  </div>
+  <div>
+    <label for="description">Description</label>
+    <textarea id="description" [(ngModel)]="newRoom.description" name="description" required></textarea>
+  </div>
+  <div>
+    <label for="price">Prix</label>
+    <input id="price" type="number" [(ngModel)]="newRoom.price" name="price" required>
+  </div>
+  <div>
+    <label for="imageUrl">URL de l'image</label>
+    <input id="imageUrl" type="text" [(ngModel)]="newRoom.imageUrl" name="imageUrl" required>
+  </div>
+  <button type="button" (click)="onSubmit()">Ajouter la chambre</button>
+</form>

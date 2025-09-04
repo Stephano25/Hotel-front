@@ -1,60 +1,11 @@
-<!-- src/app/hotel-pool/hotel-pool.component.html -->
-<div class="w-full max-w-6xl mx-auto bg-white rounded-lg shadow-xl overflow-hidden p-6 md:p-12">
-    <h1 class="text-4xl md:text-5xl font-extrabold text-blue-800 text-center mb-10">Notre Espace Piscine</h1>
-    <p class="text-lg text-gray-700 leading-relaxed text-center mb-12 max-w-3xl mx-auto">
-        Plongez dans la détente absolue dans notre magnifique piscine. Que ce soit pour quelques longueurs rafraîchissantes ou pour vous prélasser au soleil, notre espace aquatique est une oasis de tranquillité.
-    </p>
-
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-        <div class="rounded-lg overflow-hidden shadow-md">
-            <img src="https://placehold.co/800x500/A7D9F7/000000?text=Piscine+Extérieure" alt="Piscine Extérieure" class="w-full h-64 object-cover">
-            <div class="p-6">
-                <h3 class="text-2xl font-semibold text-gray-800 mb-2">Piscine Extérieure</h3>
-                <p class="text-gray-600">
-                    Profitez de notre grande piscine extérieure avec une vue imprenable. Idéale pour se rafraîchir pendant les chaudes journées d'été. Des transats confortables sont à votre disposition.
-                </p>
-            </div>
-        </div>
-        <div class="rounded-lg overflow-hidden shadow-md">
-            <img src="https://placehold.co/800x500/B2DCEF/000000?text=Piscine+Intérieure" alt="Piscine Intérieure" class="w-full h-64 object-cover">
-            <div class="p-6">
-                <h3 class="text-2xl font-semibold text-gray-800 mb-2">Piscine Intérieure Chauffée</h3>
-                <p class="text-gray-600">
-                    Notre piscine intérieure chauffée est ouverte toute l'année, offrant un refuge paisible quelle que soit la météo. Parfait pour la natation ou la relaxation.
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <h2 class="text-3xl font-bold text-blue-800 text-center mb-8">Services & Équipements</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-        <div class="bg-gray-50 p-6 rounded-lg shadow-sm flex items-center">
-            <i class="fas fa-umbrella-beach text-blue-600 text-3xl mr-4"></i>
-            <div>
-                <h3 class="text-xl font-semibold text-gray-800 mb-1">Transats & Parasols</h3>
-                <p class="text-gray-600">Détendez-vous au bord de l'eau sur nos confortables transats.</p>
-            </div>
-        </div>
-        <div class="bg-gray-50 p-6 rounded-lg shadow-sm flex items-center">
-            <i class="fas fa-cocktail text-blue-600 text-3xl mr-4"></i>
-            <div>
-                <h3 class="text-xl font-semibold text-gray-800 mb-1">Bar de la Piscine</h3>
-                <p class="text-gray-600">Cocktails rafraîchissants et snacks légers servis directement à votre transat.</p>
-            </div>
-        </div>
-        <div class="bg-gray-50 p-6 rounded-lg shadow-sm flex items-center">
-            <i class="fas fa-child text-blue-600 text-3xl mr-4"></i>
-            <div>
-                <h3 class="text-xl font-semibold text-gray-800 mb-1">Zone Enfants</h3>
-                <p class="text-gray-600">Une zone peu profonde et sécurisée pour les plus jeunes.</p>
-            </div>
-        </div>
-        <div class="bg-gray-50 p-6 rounded-lg shadow-sm flex items-center">
-            <i class="fas fa-lifeguard text-blue-600 text-3xl mr-4"></i>
-            <div>
-                <h3 class="text-xl font-semibold text-gray-800 mb-1">Surveillance</h3>
-                <p class="text-gray-600">Surveillance constante par des maîtres-nageurs qualifiés.</p>
-            </div>
-        </div>
-    </div>
+<div *ngIf="poolData">
+  <h1>{{ poolData.name }}</h1>
+  <img [src]="poolData.imageUrl" [alt]="poolData.name">
+  <p>{{ poolData.description }}</p>
+  <ul>
+    <li *ngFor="let amenity of poolData.amenities">{{ amenity }}</li>
+  </ul>
+</div>
+<div *ngIf="!poolData">
+  <p>Aucune donnée de piscine disponible.</p>
 </div>
